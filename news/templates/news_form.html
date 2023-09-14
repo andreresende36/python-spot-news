@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+<title>Formulário para Nova Notícia</title>
+{% endblock %}
+
+{% block content %}
+<div class="news-form-container">
+  <h1>Formulário para Nova Notícia</h1>
+  <form method="post" action="{% url 'news-form' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="id_title">Título:</label>
+    <input type="text" name="title" maxlength="200" required><br>
+
+    <label for="id_content">Conteúdo:</label>
+    <textarea name="content" required></textarea><br>
+
+    <label for="id_author">Autoria:</label>
+    <select name="author">
+      {% for user in users %}
+      <option value="{{ user.id }}">{{ user.name }}</option>
+      {% endfor %}
+    </select><br>
+
+    <label for="id_created_at">Criado em:</label>
+    <input type="date" name="created_at" required><br>
+
+    <label for="id_image">URL da Imagem:</label>
+    <input type="file" name="image"><br>
+
+    <label>Categorias:</label>
+    {% for category in categories %}
+    <input type="checkbox" name="categories" value="{{ category.id }}">
+    <label for="id_categories_">{{ category.name }}</label><br>
+    {% endfor %}
+
+    <button type="submit">Salvar</button>
+  </form>
+</div>
+{% endblock %}

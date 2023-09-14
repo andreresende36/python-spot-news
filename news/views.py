@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import News
-from .forms import CategoryForm
+from .models import News, Categories, Users
+from .forms import CategoryForm, NewsForm
 
 
 def home(request):
@@ -25,3 +25,26 @@ def categories_form(request):
     else:
         form = CategoryForm()
     return render(request, "categories_form.html", {"form": form})
+
+
+def news_form(request):
+    if request.method == "POST":
+        form = NewsForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect(
+                "home-page"
+            )
+    else:
+        form = NewsForm()
+
+    users = Users.objects.all()
+    categories = Categories.objects.all()
+
+    context = {
+        "form": form,
+        "users": users,
+        "categories": categories,
+    }
+
+    return render(request, "news_form.html", context)
